@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 1
   m_EditorClassIdentifier: 
   characterName: Mami
-  story: "Ka\u015Farl\u0131k"
+  story: "Sokakta orospuluk yaparken yakaland\u0131"
   isCriminal: 1
   characterPrefab: {fileID: 1497507383330918, guid: b6dd7aa0471525a4ba150a6dd06fc4b4, type: 3}

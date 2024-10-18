@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 2
   m_EditorClassIdentifier: 
   characterName: Muro
-  story: Mal
-  isCriminal: 0
+  story: "Bakkaldan sak\u0131z sat\u0131n al\u0131rken yakaland\u0131"
+  isCriminal: 1
   characterPrefab: {fileID: 1605408588197318, guid: 136486fd3adeccb4a93bbede6d9d4a99, type: 3}

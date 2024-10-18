@@ -13,12 +13,14 @@ public class GameManager : MonoBehaviour
     public int penalty = 10;          // Yanlış karar için ceza
     public Transform characterSpawnPoint;  // Karakterin sahnede duracağı hedef nokta
     public Transform characterStartPoint;  // Karakterin sağdan başlayacağı nokta
+    public Transform characterExitPoint;   // Karakterin çıkacağı nokta
 
     public CharacterStory[] characterStories;  // Scriptable Object listesi
     private CharacterStory currentCharacterStory;
     private GameObject currentCharacterObject;
 
     public float moveSpeed = 2f; // Karakterin sağdan gelirkenki hareket hızı
+    public float delayBeforeNewCharacter = 2f; // Yeni karakterin sahneye gelmeden önceki bekleme süresi
 
     // Ses efektleri
     public AudioClip correctSound; // Doğru seçim ses efekti
@@ -30,13 +32,22 @@ public class GameManager : MonoBehaviour
     {
         // AudioSource referansını al
         audioSource = GetComponent<AudioSource>();
+
+        // İlk karakteri hemen başlat
+        SpawnNewCharacter();
+    }
+
+    // Yeni karakteri gecikmeli olarak başlatan coroutine
+    private IEnumerator WaitAndSpawnNewCharacter()
+    {
+        yield return new WaitForSeconds(delayBeforeNewCharacter); // Belirtilen süre kadar bekle
         SpawnNewCharacter();
     }
 
     // Yeni karakter oluştur
     void SpawnNewCharacter()
     {
-        // Önceki karakteri sil
+        // Önceki karakteri sahneden çıkar
         if (currentCharacterObject != null)
         {
             Destroy(currentCharacterObject);
@@ -71,6 +82,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Karakteri sahneden çıkış noktasına hareket ettiren coroutine
+    private IEnumerator MoveCharacterToExit(GameObject character, Vector3 exitPosition)
+    {
+        while (Vector3.Distance(character.transform.position, exitPosition) > 0.1f)
+        {
+            // Karakteri çıkışa doğru hareket ettir
+            character.transform.position = Vector3.MoveTowards(character.transform.position, exitPosition, moveSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        // Çıkış tamamlandıktan sonra yeni bir karakter çağır (sonraki karakter için bekle)
+        StartCoroutine(WaitAndSpawnNewCharacter());
+    }
+
     // Tutukla butonuna basıldığında çalışacak metot
     public void OnArrestButtonClicked()
     {
@@ -91,8 +116,8 @@ public class GameManager : MonoBehaviour
             PlaySound(wrongSound);
         }
 
-        // Yeni bir karakter yükle
-        SpawnNewCharacter();
+        // Karakteri sahneden çıkar
+        StartCoroutine(MoveCharacterToExit(currentCharacterObject, characterExitPoint.position));
     }
 
     // Serbest bırak butonuna basıldığında çalışacak metot
@@ -115,8 +140,8 @@ public class GameManager : MonoBehaviour
             PlaySound(wrongSound);
         }
 
-        // Yeni bir karakter yükle
-        SpawnNewCharacter();
+        // Karakteri sahneden çıkar
+        StartCoroutine(MoveCharacterToExit(currentCharacterObject, characterExitPoint.position));
     }
 
     // Ses efektini çalma metodu
