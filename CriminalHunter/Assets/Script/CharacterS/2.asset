@@ -15,4 +15,4 @@ MonoBehaviour:
   characterName: Muro
   story: Mal
   isCriminal: 0
-  characterPrefab: {fileID: 100038, guid: 0045ffb477e043a46950af7e617beb06, type: 3}
+  characterPrefab: {fileID: 1605408588197318, guid: 136486fd3adeccb4a93bbede6d9d4a99, type: 3}

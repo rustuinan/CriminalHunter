@@ -20,9 +20,16 @@ public class GameManager : MonoBehaviour
 
     public float moveSpeed = 2f; // Karakterin sağdan gelirkenki hareket hızı
 
+    // Ses efektleri
+    public AudioClip correctSound; // Doğru seçim ses efekti
+    public AudioClip wrongSound;   // Yanlış seçim ses efekti
+    private AudioSource audioSource;  // Ses efektlerini çalmak için AudioSource
+
     // Oyunu başlatma
     void Start()
     {
+        // AudioSource referansını al
+        audioSource = GetComponent<AudioSource>();
         SpawnNewCharacter();
     }
 
@@ -49,7 +56,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(MoveCharacterToPosition(currentCharacterObject, characterSpawnPoint.position));
 
         // Karakter hikayesini UI'da göster
-        characterStoryText.text = currentCharacterStory.characterName + ": " + currentCharacterStory.story;
+        characterStoryText.text = currentCharacterStory.characterName + "\n\n" + currentCharacterStory.story;
         resultText.text = ""; // Sonucu sıfırla
     }
 
@@ -71,11 +78,17 @@ public class GameManager : MonoBehaviour
         {
             resultText.text = "Doğru! " + currentCharacterStory.characterName + " tutuklandı.";
             playerScore += 10; // Doğru karar için puan ekle
+
+            // Doğru ses efektini çal
+            PlaySound(correctSound);
         }
         else
         {
             resultText.text = "Yanlış! " + currentCharacterStory.characterName + " suçsuzdu.";
             playerScore -= penalty; // Yanlış karar için ceza ver
+
+            // Yanlış ses efektini çal
+            PlaySound(wrongSound);
         }
 
         // Yeni bir karakter yükle
@@ -89,14 +102,29 @@ public class GameManager : MonoBehaviour
         {
             resultText.text = "Doğru! " + currentCharacterStory.characterName + " serbest bırakıldı.";
             playerScore += 10; // Doğru karar için puan ekle
+
+            // Doğru ses efektini çal
+            PlaySound(correctSound);
         }
         else
         {
             resultText.text = "Yanlış! " + currentCharacterStory.characterName + " suçluydu.";
             playerScore -= penalty; // Yanlış karar için ceza ver
+
+            // Yanlış ses efektini çal
+            PlaySound(wrongSound);
         }
 
         // Yeni bir karakter yükle
         SpawnNewCharacter();
+    }
+
+    // Ses efektini çalma metodu
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }
