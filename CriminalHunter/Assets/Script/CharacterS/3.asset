@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79d7f1fa13ed1dd4b8af01d083e38bfa, type: 3}
   m_Name: 3
   m_EditorClassIdentifier: 
-  characterName: Serra
-  story: "R\xFC\u015Ft\xFC'n\xFCn manitas\u0131"
+  characterName: Chupia
+  story: "Sokakta Ko\u015Farken Sat\u0131c\u0131n\u0131n D\xFCkkan\u0131n\u0131 y\u0131kt\u0131"
   isCriminal: 0
   characterPrefab: {fileID: 1278689708014708, guid: 86fbce35c5d130147bc5b953dbf3059c, type: 3}

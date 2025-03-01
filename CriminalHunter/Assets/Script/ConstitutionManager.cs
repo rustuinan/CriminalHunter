@@ -1,93 +1,87 @@
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
 
 public class ConstitutionManager : MonoBehaviour
 {
-    public GameObject constitutionPanel;  // Anayasa paneli (kitap)
-    public TextMeshProUGUI constitutionText; // Anayasa maddelerini gösterecek TextMeshPro
-    public Button nextPageButton;  // İleri butonu
-    public Button prevPageButton;  // Geri butonu
-    public Button closeButton;     // Kapat butonu
-    public List<string> constitutionArticles; // Anayasa maddelerini tutacak liste
+    public List<ConstitutionArticle> allArticles;
+    public List<string> unlockedArticles = new List<string>();
 
-    private int currentPage = 0;   // Mevcut sayfa
-    [SerializeField] private int articlesPerPage = 3; // Her sayfada kaç madde göstereceğimiz
+    public TextMeshProUGUI constitutionText;
+    public GameObject constitutionPanel;
 
-    // Oyun başlarken çalışacak
+    public int articlesPerPage = 3;
+    private int currentPage = 0;
+
+    public GameObject nextPageButton;
+    public GameObject previousPageButton;
+
     void Start()
     {
-        // İlk başta anayasa paneli kapalı
-        constitutionPanel.SetActive(false);
-
-        // İlk sayfa yüklensin
-        DisplayPage(currentPage);
-
-        // Butonlara fonksiyonları bağlama
-        nextPageButton.onClick.AddListener(NextPage);
-        prevPageButton.onClick.AddListener(PreviousPage);
-        closeButton.onClick.AddListener(CloseConstitution);
+        UpdateConstitutionUI();
     }
 
-    // Anayasa panelini açma
+    public void UnlockArticlesForLevel(int level)
+    {
+        foreach (var article in allArticles)
+        {
+            if (article.unlockLevel == level && !unlockedArticles.Contains(article.articleText))
+            {
+                unlockedArticles.Add(article.articleText);
+            }
+        }
+
+        UpdateConstitutionUI();
+    }
+
+    private void UpdateConstitutionUI()
+    {
+        if (constitutionText == null) return;
+
+        int startIndex = currentPage * articlesPerPage;
+        int endIndex = Mathf.Min(startIndex + articlesPerPage, unlockedArticles.Count);
+
+        constitutionText.text = "Anayasa:\n\n\n";
+        for (int i = startIndex; i < endIndex; i++)
+        {
+            constitutionText.text += unlockedArticles[i] + "\n\n";
+        }
+
+        previousPageButton.SetActive(currentPage > 0);
+        nextPageButton.SetActive(endIndex < unlockedArticles.Count);
+    }
+
     public void OpenConstitution()
     {
-        constitutionPanel.SetActive(true);
-        DisplayPage(currentPage); // Mevcut sayfayı göster
+        if (constitutionPanel != null)
+        {
+            constitutionPanel.SetActive(true);
+        }
     }
 
-    // Anayasa panelini kapatma
     public void CloseConstitution()
     {
-        constitutionPanel.SetActive(false);
-    }
-
-    // Mevcut sayfadaki anayasa maddelerini gösterme
-    void DisplayPage(int pageIndex)
-    {
-        // Her sayfada gösterilecek madde grubunu hesapla
-        int startArticleIndex = pageIndex * articlesPerPage;
-        int endArticleIndex = Mathf.Min(startArticleIndex + articlesPerPage, constitutionArticles.Count);
-
-        // Sayfadaki maddeleri birleştir
-        string pageContent = "";
-        for (int i = startArticleIndex; i < endArticleIndex; i++)
+        if (constitutionPanel != null)
         {
-            pageContent += (i + 1) + ". " + constitutionArticles[i] + "\n\n"; // Madde numarası ve içerik
+            constitutionPanel.SetActive(false);
         }
-
-        // Anayasa metnini sayfa sayfa göster
-        constitutionText.text = pageContent;
-
-        // Sayfa geçiş butonlarının durumunu kontrol et
-        prevPageButton.gameObject.SetActive(pageIndex > 0); // İlk sayfadaysa geri butonunu gizle
-        nextPageButton.gameObject.SetActive(endArticleIndex < constitutionArticles.Count); // Son sayfadaysa ileri butonunu gizle
     }
 
-    // İleri sayfa fonksiyonu
-    void NextPage()
+    public void NextPage()
     {
-        if ((currentPage + 1) * articlesPerPage < constitutionArticles.Count)
+        if ((currentPage + 1) * articlesPerPage < unlockedArticles.Count)
         {
             currentPage++;
-            DisplayPage(currentPage);
+            UpdateConstitutionUI();
         }
     }
 
-    // Geri sayfa fonksiyonu
-    void PreviousPage()
+    public void PreviousPage()
     {
         if (currentPage > 0)
         {
             currentPage--;
-            DisplayPage(currentPage);
+            UpdateConstitutionUI();
         }
-    }
-
-    // Anayasaya yeni maddeler ekleme (seviye ilerledikçe kullanılacak)
-    public void AddArticle(string newArticle)
-    {
-        constitutionArticles.Add(newArticle);
     }
 }

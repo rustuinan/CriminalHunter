@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79d7f1fa13ed1dd4b8af01d083e38bfa, type: 3}
   m_Name: 1
   m_EditorClassIdentifier: 
-  characterName: Mami
-  story: "Sokakta orospuluk yaparken yakaland\u0131"
+  characterName: John
+  story: "Sak\u0131z \xC7i\u011Fnerken Yakaland\u0131"
   isCriminal: 1
   characterPrefab: {fileID: 1497507383330918, guid: b6dd7aa0471525a4ba150a6dd06fc4b4, type: 3}

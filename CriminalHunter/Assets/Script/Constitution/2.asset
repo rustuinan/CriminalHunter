@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79d7f1fa13ed1dd4b8af01d083e38bfa, type: 3}
+  m_Script: {fileID: 11500000, guid: 2eb183f4d67730649b16863df76be673, type: 3}
   m_Name: 2
   m_EditorClassIdentifier: 
-  characterName: Mealis
-  story: "Bakkaldan sak\u0131z sat\u0131n al\u0131rken yakaland\u0131"
-  isCriminal: 0
-  characterPrefab: {fileID: 1605408588197318, guid: 136486fd3adeccb4a93bbede6d9d4a99, type: 3}
+  articleText: "Z\u0131plamak Yasak"
+  unlockLevel: 2
